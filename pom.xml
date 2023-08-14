@@ -61,7 +61,7 @@
         </dependency>
         <!--tianxing-util-->
         <dependency>
-            <groupId>com.ltx</groupId>
+            <groupId>io.github.tianxing-ovo</groupId>
             <artifactId>tianxing-util</artifactId>
             <version>1.0</version>
         </dependency>
