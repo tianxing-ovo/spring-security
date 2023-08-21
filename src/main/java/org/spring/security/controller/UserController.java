@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     /**
-     * 查询
+     * 基于权限
      * PreAuthorize:预授权,在方法执行前进行权限校验，决定是否允许方法的执行
      * PostAuthorize:后授权,在方法执行后对方法的结果进行权限校验，决定是否允许返回结果或其中的某个属性访问
      */

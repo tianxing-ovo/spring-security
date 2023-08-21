@@ -11,4 +11,10 @@
                  join authority a on a.id = ra.authority_id
         where u.id = #{id}
     </select>
+    <select id="getRolesById" resultType="java.lang.String">
+        select role_name
+        from role
+                 join user_role on role.id = user_role.role_id
+        where user_role.user_id = #{id}
+    </select>
 </mapper>
