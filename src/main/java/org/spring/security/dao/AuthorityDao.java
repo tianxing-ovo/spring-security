@@ -16,7 +16,7 @@ public interface AuthorityDao extends BaseMapper<Authority> {
     List<String> getAuthById(@Param("id") Long id);
 
     /**
-     * 通过用户id获取用户的角色名称
+     * 通过用户id获取用户的所有角色
      */
     List<String> getRolesById(@Param("id") Long id);
 }

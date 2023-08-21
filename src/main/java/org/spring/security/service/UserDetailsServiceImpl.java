@@ -37,12 +37,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = userDao.selectOne(new QueryWrapper<User>().eq("username", username));
         Long id = user.getId();
         // 根据用户id查询用户所有角色和权限
-        List<String> list = authorityDao.getAuthById(id);
         List<String> roleList = authorityDao.getRolesById(id);
+        List<String> authorityList = authorityDao.getAuthById(id);
         // 将角色和权限加入权限列表中，前缀"ROLE_"是Spring Security规定的
-        List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
-        roleList.forEach(role -> authorityList.add(new SimpleGrantedAuthority("ROLE_" + role)));
-        list.forEach(a -> authorityList.add(new SimpleGrantedAuthority(a)));
-        return new SecurityUser(user, authorityList);
+        List<SimpleGrantedAuthority> list = new ArrayList<>();
+        roleList.forEach(role -> list.add(new SimpleGrantedAuthority("ROLE_" + role)));
+        authorityList.forEach(authority -> list.add(new SimpleGrantedAuthority(authority)));
+        return new SecurityUser(user, list);
     }
 }
