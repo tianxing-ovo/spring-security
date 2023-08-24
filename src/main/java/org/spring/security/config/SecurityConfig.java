@@ -2,10 +2,10 @@ package org.spring.security.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import common.R;
+import enums.ErrorCode;
 import jwt.JwtUtil;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
-import org.spring.security.constant.ErrorCode;
 import org.spring.security.entity.SecurityUser;
 import org.spring.security.filter.JwtFilter;
 import org.springframework.context.annotation.Bean;
@@ -70,20 +70,20 @@ public class SecurityConfig {
             R r = R.ok("登录成功").put("token", token);
             write(r, response);
         }).failureHandler((request, response, exception) -> {
-            R r = R.error(ErrorCode.LOGIN_FAILED.getCode(), "登录失败");
+            R r = R.error(ErrorCode.LOGIN_FAILED.getCode(), ErrorCode.LOGIN_FAILED.getMessage());
             write(r, response);
         }).permitAll();//允许访问登录页面
         //设置退出成功处理器
         http.logout().logoutSuccessHandler((request, response, authentication) -> {
             String token = request.getHeader("token");
             if (StringUtils.isBlank(token)) {
-                R r = R.error(ErrorCode.TOKEN_IS_NULL.getCode(), "token为空");
+                R r = R.error(ErrorCode.TOKEN_IS_NULL.getCode(), ErrorCode.TOKEN_IS_NULL.getMessage());
                 write(r, response);
                 return;
             }
             boolean b = jwtUtil.verifyToken(token);
             if (!b) {
-                R r = R.error(ErrorCode.TOKEN_IS_MISTAKE.getCode(), "token错误");
+                R r = R.error(ErrorCode.TOKEN_IS_MISTAKE.getCode(), ErrorCode.TOKEN_IS_MISTAKE.getMessage());
                 write(r, response);
                 return;
             }
@@ -95,7 +95,7 @@ public class SecurityConfig {
         });
         //设置访问拒绝处理器
         http.exceptionHandling().accessDeniedHandler((request, response, accessDeniedException) -> {
-            R r = R.error(ErrorCode.UNAUTHORIZED.getCode(), "您没有权限访问该资源");
+            R r = R.error(ErrorCode.UNAUTHORIZED.getCode(), ErrorCode.UNAUTHORIZED.getMessage());
             write(r, response);
         });
         http.csrf().disable();

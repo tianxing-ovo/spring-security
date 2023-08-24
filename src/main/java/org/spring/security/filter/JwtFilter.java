@@ -2,11 +2,11 @@ package org.spring.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import common.R;
+import enums.ErrorCode;
 import jwt.JwtUtil;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
-import org.spring.security.constant.ErrorCode;
 import org.spring.security.entity.User;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -51,21 +51,21 @@ public class JwtFilter implements Filter {
         }
         String token = request.getHeader("token");
         if (StringUtils.isBlank(token)) {
-            R r = R.error(ErrorCode.TOKEN_IS_NULL.getCode(), "token为空");
+            R r = R.error(ErrorCode.TOKEN_IS_NULL.getCode(), ErrorCode.TOKEN_IS_NULL.getMessage());
             write(r, response);
             return;
         }
         //校验token
         boolean b = jwtUtil.verifyToken(token);
         if (!b) {
-            R r = R.error(ErrorCode.TOKEN_IS_MISTAKE.getCode(), "token错误");
+            R r = R.error(ErrorCode.TOKEN_IS_MISTAKE.getCode(), ErrorCode.TOKEN_IS_MISTAKE.getMessage());
             write(r, response);
             return;
         }
         String key = "loginToken:" + token;
         String s = redisUtil.get(key);
         if (StringUtils.isBlank(s)) {
-            R r = R.error(ErrorCode.USER_HAS_EXITED.getCode(), "用户已退出,请重新登录");
+            R r = R.error(ErrorCode.USER_HAS_EXITED.getCode(), ErrorCode.USER_HAS_EXITED.getMessage());
             write(r, response);
             return;
         }
