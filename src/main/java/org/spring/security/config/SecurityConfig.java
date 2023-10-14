@@ -1,9 +1,10 @@
 package org.spring.security.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import common.R;
-import enums.ErrorCode;
-import jwt.JwtUtil;
+import io.github.tianxingovo.common.R;
+import io.github.tianxingovo.enums.ErrorCode;
+import io.github.tianxingovo.jwt.JwtUtil;
+import io.github.tianxingovo.redis.RedisUtil;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.spring.security.entity.SecurityUser;
@@ -18,7 +19,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import redis.RedisUtil;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -54,26 +54,26 @@ public class SecurityConfig {
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        //在UsernamePasswordAuthenticationFilter前添加jwt过滤器
+        // 在UsernamePasswordAuthenticationFilter前添加jwt过滤器
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         http.authorizeRequests().anyRequest().authenticated();//任何请求都需要认证
-        //登录成功后生成一个jwtToken,设置登录成功处理器和登录失败处理器
+        // 登录成功后生成一个jwtToken,设置登录成功处理器和登录失败处理器
         http.formLogin().successHandler((request, response, authentication) -> {
             SecurityUser securityUser = (SecurityUser) authentication.getPrincipal();
-            String userInfo = om.writeValueAsString(securityUser.getUser());//用户信息json字符串
-            List<SimpleGrantedAuthority> list = securityUser.getList();//用户权限
+            String userInfo = om.writeValueAsString(securityUser.getUser()); // 用户信息json字符串
+            List<SimpleGrantedAuthority> list = securityUser.getList(); // 用户权限
             List<String> authList = list.stream().map(SimpleGrantedAuthority::getAuthority).collect(Collectors.toList());
             String token = jwtUtil.createToken(userInfo, authList);
             String key = "loginToken:" + token;
-            //authentication存入redis,解决退出时jwt不能过期的问题,跟jwt过期时间保持一致
+            // authentication存入redis,解决退出时jwt不能过期的问题,跟jwt过期时间保持一致
             redisUtil.set(key, om.writeValueAsString(authentication), 2, TimeUnit.HOURS);
             R r = R.ok("登录成功").put("token", token);
             write(r, response);
         }).failureHandler((request, response, exception) -> {
             R r = R.error(ErrorCode.LOGIN_FAILED.getCode(), ErrorCode.LOGIN_FAILED.getMessage());
             write(r, response);
-        }).permitAll();//允许访问登录页面
-        //设置退出成功处理器
+        }).permitAll();  // 允许访问登录页面
+        // 设置退出成功处理器
         http.logout().logoutSuccessHandler((request, response, authentication) -> {
             String token = request.getHeader("token");
             if (StringUtils.isBlank(token)) {
@@ -88,18 +88,18 @@ public class SecurityConfig {
                 return;
             }
             String key = "loginToken:" + token;
-            //删除authentication
+            // 删除authentication
             redisUtil.delete(key);
             R r = R.ok("退出成功");
             write(r, response);
         });
-        //设置访问拒绝处理器
+        // 设置访问拒绝处理器
         http.exceptionHandling().accessDeniedHandler((request, response, accessDeniedException) -> {
             R r = R.error(ErrorCode.UNAUTHORIZED.getCode(), ErrorCode.UNAUTHORIZED.getMessage());
             write(r, response);
         });
         http.csrf().disable();
-        //不创建session
+        // 不创建session
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         return http.build();
     }

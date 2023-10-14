@@ -3,7 +3,7 @@ package org.spring.security;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication(scanBasePackages = {"redis", "org.spring.security","jwt"})
+@SpringBootApplication(scanBasePackages = {"org.spring.security", "io.github.tianxingovo"})
 public class Application {
 
     public static void main(String[] args) {

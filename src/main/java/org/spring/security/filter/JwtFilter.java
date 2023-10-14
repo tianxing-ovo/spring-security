@@ -1,9 +1,10 @@
 package org.spring.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import common.R;
-import enums.ErrorCode;
-import jwt.JwtUtil;
+import io.github.tianxingovo.common.R;
+import io.github.tianxingovo.enums.ErrorCode;
+import io.github.tianxingovo.jwt.JwtUtil;
+import io.github.tianxingovo.redis.RedisUtil;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
@@ -12,7 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import redis.RedisUtil;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;

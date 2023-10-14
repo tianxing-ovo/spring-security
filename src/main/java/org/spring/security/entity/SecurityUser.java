@@ -17,7 +17,7 @@ public class SecurityUser implements UserDetails {
     private static final long serialVersionUID = -2672594260930233276L;
 
     private final User user;
-    private final List<SimpleGrantedAuthority> list; //权限列表
+    private final List<SimpleGrantedAuthority> list; // 权限列表
 
     public SecurityUser(User user, List<SimpleGrantedAuthority> list) {
         this.user = user;
@@ -32,7 +32,7 @@ public class SecurityUser implements UserDetails {
     @Override
     public String getPassword() {
         String password = user.getPassword();
-        user.setPassword("");//擦除密码,防止传到前端
+        user.setPassword(""); // 擦除密码,防止传到前端
         return password;
     }
 

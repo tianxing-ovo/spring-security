@@ -1,6 +1,7 @@
 package org.spring.security.controller;
 
-import common.R;
+
+import io.github.tianxingovo.common.R;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
