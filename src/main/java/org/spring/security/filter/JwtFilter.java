@@ -2,7 +2,7 @@ package org.spring.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.tianxingovo.common.R;
-import io.github.tianxingovo.enums.ErrorCode;
+import io.github.tianxingovo.enums.ErrorCodeEnum;
 import io.github.tianxingovo.jwt.JwtUtil;
 import io.github.tianxingovo.redis.RedisUtil;
 import lombok.AllArgsConstructor;
@@ -51,21 +51,21 @@ public class JwtFilter implements Filter {
         }
         String token = request.getHeader("token");
         if (StringUtils.isBlank(token)) {
-            R r = R.error(ErrorCode.TOKEN_IS_NULL.getCode(), ErrorCode.TOKEN_IS_NULL.getMessage());
+            R r = R.error(ErrorCodeEnum.TOKEN_IS_NULL.getCode(), ErrorCodeEnum.TOKEN_IS_NULL.getMessage());
             write(r, response);
             return;
         }
         //校验token
         boolean b = jwtUtil.verifyToken(token);
         if (!b) {
-            R r = R.error(ErrorCode.TOKEN_IS_MISTAKE.getCode(), ErrorCode.TOKEN_IS_MISTAKE.getMessage());
+            R r = R.error(ErrorCodeEnum.TOKEN_IS_MISTAKE.getCode(), ErrorCodeEnum.TOKEN_IS_MISTAKE.getMessage());
             write(r, response);
             return;
         }
         String key = "loginToken:" + token;
         String s = redisUtil.get(key);
         if (StringUtils.isBlank(s)) {
-            R r = R.error(ErrorCode.USER_HAS_EXITED.getCode(), ErrorCode.USER_HAS_EXITED.getMessage());
+            R r = R.error(ErrorCodeEnum.USER_HAS_EXITED.getCode(), ErrorCodeEnum.USER_HAS_EXITED.getMessage());
             write(r, response);
             return;
         }

@@ -2,7 +2,7 @@ package org.spring.security.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.tianxingovo.common.R;
-import io.github.tianxingovo.enums.ErrorCode;
+import io.github.tianxingovo.enums.ErrorCodeEnum;
 import io.github.tianxingovo.jwt.JwtUtil;
 import io.github.tianxingovo.redis.RedisUtil;
 import lombok.SneakyThrows;
@@ -70,20 +70,20 @@ public class SecurityConfig {
             R r = R.ok("登录成功").put("token", token);
             write(r, response);
         }).failureHandler((request, response, exception) -> {
-            R r = R.error(ErrorCode.LOGIN_FAILED.getCode(), ErrorCode.LOGIN_FAILED.getMessage());
+            R r = R.error(ErrorCodeEnum.LOGIN_FAILED.getCode(), ErrorCodeEnum.LOGIN_FAILED.getMessage());
             write(r, response);
         }).permitAll();  // 允许访问登录页面
         // 设置退出成功处理器
         http.logout().logoutSuccessHandler((request, response, authentication) -> {
             String token = request.getHeader("token");
             if (StringUtils.isBlank(token)) {
-                R r = R.error(ErrorCode.TOKEN_IS_NULL.getCode(), ErrorCode.TOKEN_IS_NULL.getMessage());
+                R r = R.error(ErrorCodeEnum.TOKEN_IS_NULL.getCode(), ErrorCodeEnum.TOKEN_IS_NULL.getMessage());
                 write(r, response);
                 return;
             }
             boolean b = jwtUtil.verifyToken(token);
             if (!b) {
-                R r = R.error(ErrorCode.TOKEN_IS_MISTAKE.getCode(), ErrorCode.TOKEN_IS_MISTAKE.getMessage());
+                R r = R.error(ErrorCodeEnum.TOKEN_IS_MISTAKE.getCode(), ErrorCodeEnum.TOKEN_IS_MISTAKE.getMessage());
                 write(r, response);
                 return;
             }
@@ -95,7 +95,7 @@ public class SecurityConfig {
         });
         // 设置访问拒绝处理器
         http.exceptionHandling().accessDeniedHandler((request, response, accessDeniedException) -> {
-            R r = R.error(ErrorCode.UNAUTHORIZED.getCode(), ErrorCode.UNAUTHORIZED.getMessage());
+            R r = R.error(ErrorCodeEnum.UNAUTHORIZED.getCode(), ErrorCodeEnum.UNAUTHORIZED.getMessage());
             write(r, response);
         });
         http.csrf().disable();
