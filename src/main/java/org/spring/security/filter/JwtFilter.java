@@ -32,11 +32,11 @@ import java.util.stream.Collectors;
 public class JwtFilter implements Filter {
 
 
-    ObjectMapper om;
+    private ObjectMapper om;
 
-    JwtUtil jwtUtil;
+    private JwtUtil jwtUtil;
 
-    RedisUtil redisUtil;
+    private RedisUtil redisUtil;
 
     @SneakyThrows
     @Override

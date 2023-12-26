@@ -35,14 +35,15 @@ import java.util.stream.Collectors;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
+
     @Resource
-    ObjectMapper om;
+    private ObjectMapper om;
     @Resource
-    JwtFilter jwtFilter;
+    private JwtFilter jwtFilter;
     @Resource
-    RedisUtil redisUtil;
+    private RedisUtil redisUtil;
     @Resource
-    JwtUtil jwtUtil;
+    private JwtUtil jwtUtil;
 
     /**
      * 配置过滤器链
