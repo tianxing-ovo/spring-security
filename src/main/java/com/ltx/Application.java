@@ -1,13 +1,14 @@
-package org.spring.security;
+package com.ltx;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication(scanBasePackages = {"org.spring.security", "io.github.tianxingovo"})
+/**
+ * @author tianxing
+ */
+@SpringBootApplication
 public class Application {
-
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
-
 }

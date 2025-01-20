@@ -1,38 +1,39 @@
-package org.spring.security.entity;
+package com.ltx.entity;
 
-import lombok.Data;
-import org.springframework.security.core.GrantedAuthority;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
- * 用户信息
+ * 安全用户
+ *
+ * @author tianxing
  */
-@Data
+@Getter
+@AllArgsConstructor
 public class SecurityUser implements UserDetails {
 
     private static final long serialVersionUID = -2672594260930233276L;
 
+    // 用户
     private final User user;
-    private final List<SimpleGrantedAuthority> list; // 权限列表
 
-    public SecurityUser(User user, List<SimpleGrantedAuthority> list) {
-        this.user = user;
-        this.list = list;
-    }
+    // 存放用户的授权信息: 包括角色(Role)和权限(Permission)
+    private final List<SimpleGrantedAuthority> authorities;
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return list;
+    public List<SimpleGrantedAuthority> getAuthorities() {
+        return authorities;
     }
 
     @Override
     public String getPassword() {
         String password = user.getPassword();
-        user.setPassword(""); // 擦除密码,防止传到前端
+        // 擦除密码 -> 防止传到前端
+        user.setPassword("");
         return password;
     }
 

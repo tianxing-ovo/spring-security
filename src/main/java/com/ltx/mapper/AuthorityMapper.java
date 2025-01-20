@@ -1,14 +1,15 @@
-package org.spring.security.dao;
+package com.ltx.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.spring.security.entity.Authority;
 
 import java.util.List;
 
+/**
+ * @author tianxing
+ */
 @Mapper
-public interface AuthorityDao extends BaseMapper<Authority> {
+public interface AuthorityMapper {
 
     /**
      * 通过用户id获取用户的所有权限
