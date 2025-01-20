@@ -9,7 +9,7 @@
         <relativePath/>
     </parent>
     <groupId>com.ltx</groupId>
-    <artifactId>SpringSecurity</artifactId>
+    <artifactId>spring-security</artifactId>
     <version>1.0</version>
     <name>SpringSecurity</name>
     <description>SpringSecurity</description>
