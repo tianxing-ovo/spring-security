@@ -35,41 +35,11 @@ public class Result {
     /**
      * 成功
      *
-     * @return 通用响应对象
-     */
-    public static Result success() {
-        return new Result(200, "success");
-    }
-
-    /**
-     * 成功
-     *
      * @param message 消息
      * @return 通用响应对象
      */
     public static Result success(String message) {
         return new Result(200, message);
-    }
-
-    /**
-     * 成功
-     *
-     * @param data 数据
-     * @return 通用响应对象
-     */
-    public static Result success(Map<String, Object> data) {
-        return new Result(200, "success", data);
-    }
-
-    /**
-     * 失败
-     *
-     * @param code 状态码
-     * @param msg  消息
-     * @return 通用响应对象
-     */
-    public static Result fail(Integer code, String msg) {
-        return new Result(code, msg);
     }
 
     /**
@@ -80,18 +50,6 @@ public class Result {
      */
     public static Result fail(ErrorCodeEnum errorCodeEnum) {
         return new Result(errorCodeEnum.getCode(), errorCodeEnum.getMessage());
-    }
-
-    /**
-     * 失败
-     *
-     * @param code    状态码
-     * @param message 消息
-     * @param data    数据
-     * @return 通用响应对象
-     */
-    public static Result fail(Integer code, String message, Map<String, Object> data) {
-        return new Result(code, message, data);
     }
 
     /**
