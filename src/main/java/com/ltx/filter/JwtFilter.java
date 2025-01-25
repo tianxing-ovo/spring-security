@@ -5,7 +5,8 @@ import cn.hutool.core.util.StrUtil;
 import com.ltx.constant.Constant;
 import com.ltx.entity.Result;
 import com.ltx.entity.User;
-import com.ltx.enums.ErrorCodeEnum;
+import com.ltx.enums.ErrorCode;
+import com.ltx.enums.JwsVerificationResult;
 import com.ltx.util.JwtUtil;
 import com.ltx.util.RedisUtil;
 import com.ltx.util.ServletUtil;
@@ -53,23 +54,31 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         // 从请求头中获取jws
         String jws = request.getHeader(Constant.TOKEN);
+        // 如果token为空
         if (StrUtil.isBlank(jws)) {
-            Result result = Result.fail(ErrorCodeEnum.TOKEN_IS_NULL);
+            Result result = Result.fail(ErrorCode.TOKEN_IS_NULL);
             ServletUtil.write(response, result);
             return;
         }
         // 校验token
-        boolean verify = JwtUtil.verifyJws(jws);
-        if (!verify) {
-            Result result = Result.fail(ErrorCodeEnum.TOKEN_IS_MISTAKE);
+        JwsVerificationResult verificationResult = JwtUtil.verifyJws(jws);
+        // 如果token过期
+        if (verificationResult == JwsVerificationResult.EXPIRED) {
+            Result result = Result.fail(ErrorCode.TOKEN_EXPIRED);
+            ServletUtil.write(response, result);
+            return;
+        }
+        // 如果token无效
+        if (verificationResult == JwsVerificationResult.INVALID) {
+            Result result = Result.fail(ErrorCode.TOKEN_INVALID);
             ServletUtil.write(response, result);
             return;
         }
         // key = login:token:<jws>
         String key = Constant.LOGIN_TOKEN_KEY + jws;
-        // 判断用户是否已退出
+        // 如果用户已退出
         if (Boolean.FALSE.equals(redisUtil.hasKey(key))) {
-            Result result = Result.fail(ErrorCodeEnum.USER_HAS_EXITED);
+            Result result = Result.fail(ErrorCode.USER_HAS_EXITED);
             ServletUtil.write(response, result);
             return;
         }

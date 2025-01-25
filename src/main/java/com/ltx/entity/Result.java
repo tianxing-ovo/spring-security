@@ -1,7 +1,7 @@
 package com.ltx.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.ltx.enums.ErrorCodeEnum;
+import com.ltx.enums.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -45,11 +45,11 @@ public class Result {
     /**
      * 失败
      *
-     * @param errorCodeEnum 错误状态码枚举
+     * @param errorCode 错误状态码枚举
      * @return 通用响应对象
      */
-    public static Result fail(ErrorCodeEnum errorCodeEnum) {
-        return new Result(errorCodeEnum.getCode(), errorCodeEnum.getMessage());
+    public static Result fail(ErrorCode errorCode) {
+        return new Result(errorCode.getCode(), errorCode.getMessage());
     }
 
     /**

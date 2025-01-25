@@ -3,7 +3,9 @@ package com.ltx.util;
 
 import com.ltx.constant.Constant;
 import com.ltx.entity.User;
+import com.ltx.enums.JwsVerificationResult;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -73,14 +75,16 @@ public class JwtUtil {
      * 验证JWS
      *
      * @param jws JWS
-     * @return 是否有效
+     * @return 验证结果枚举
      */
-    public static boolean verifyJws(String jws) {
+    public static JwsVerificationResult verifyJws(String jws) {
         try {
             parseJws(jws);
-            return true;
+            return JwsVerificationResult.VALID;
+        } catch (ExpiredJwtException e) {
+            return JwsVerificationResult.EXPIRED;
         } catch (Exception e) {
-            return false;
+            return JwsVerificationResult.INVALID;
         }
     }
 
